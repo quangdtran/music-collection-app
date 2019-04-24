@@ -1,0 +1,23 @@
+{
+  "name": "music-collection-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm run start",
+    "server": "cd server && npm run start",
+    "client-lint": "cd client && npm run build",
+    "start": "concurrently - kill-others \"npm run server\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "ghooks": "^2.0.4"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run client-lint"
+    }
+  }
+}
