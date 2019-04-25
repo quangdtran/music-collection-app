@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const devServer = {
   port: 8008,
   host: 'localhost',
-  open: false,
+  open: true,
 };
 
 const VENDER_LIBS = [
@@ -19,6 +19,7 @@ const VENDER_LIBS = [
   'redux-thunk',
   'reselect',
   'styled-components',
+  'prop-types',
 ];
 
 module.exports = {
@@ -50,8 +51,9 @@ module.exports = {
     modules: [path.resolve(__dirname, './src'), 'node_modules'],
     alias: {
       '@src': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
       '@containers': path.resolve(__dirname, './src/containers'),
-      '@components': path.resolve(__dirname, '.src/components'),
+      '@global': path.resolve(__dirname, '.src/global'),
     },
   },
   optimization: {
