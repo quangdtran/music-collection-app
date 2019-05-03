@@ -68,7 +68,7 @@ export default class HeaderBar extends Component {
         searchText: '',
         isShowSearchResultBox: false,
       });
-      ReactDOM.findDOMNode(this.refs.searchInput).blur();
+      ReactDOM.findDOMNode(this.refs['search-input']).blur();
     }
   }
 
@@ -78,6 +78,15 @@ export default class HeaderBar extends Component {
       isShowSearchResultBox: true,
       listSearchResultCurrent: this.data.listSearchResult,
     });
+  }
+
+  // method: render list search result
+  renderListSearchResult() {
+    return this.state.listSearchResultCurrent.map(user => (
+      <ItemSearchResultBox key={user.name}>
+        <ItemResult {...user} />
+      </ItemSearchResultBox>
+    ));
   }
 
   render() {
@@ -90,7 +99,7 @@ export default class HeaderBar extends Component {
           <GridItem item xs={4}>
             <WrapSearchInput>
               <SearchInput
-                ref="searchInput"
+                ref="search-input"
                 name="searchText"
                 value={this.state.searchText}
                 placeholder="Tìm kiếm bạn bè"
@@ -110,13 +119,7 @@ export default class HeaderBar extends Component {
                     <HeaderSearchResultBox>
                       <p>Kết quả tìm kiếm cho {`"${this.state.searchText}"`}</p>
                     </HeaderSearchResultBox>
-                    {
-                      this.state.listSearchResultCurrent.map(user => (
-                        <ItemSearchResultBox key={user.name}>
-                          <ItemResult {...user} />
-                        </ItemSearchResultBox>
-                      ))
-                    }
+                    {this.renderListSearchResult()}
                   </SearchResultBox>
                 ) : null
               }

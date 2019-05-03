@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import {
+  Grid,
+} from '@material-ui/core';
 
 import HeaderBar from '@containers/HeaderBar';
-import { connect } from 'react-redux';
+import MusicRoomSideBar from '@containers/MusicRoomSideBar';
+import MusicPlayBox from '@containers/MusicPlayBox';
+
 import {
   Title,
+  WrapApp,
+  GridAppBody,
+  GridMusicRoomSideBar,
 } from './App.styled';
 
 
@@ -22,10 +32,19 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <HeaderBar />
-        <Title>Hello App</Title>
-      </div>
+      <WrapApp>
+        <header>
+          <HeaderBar />
+        </header>
+        <GridAppBody container>
+          <GridMusicRoomSideBar item xs={3}>
+            <MusicRoomSideBar />
+          </GridMusicRoomSideBar>
+          <Grid item xs={9}>
+            <MusicPlayBox />
+          </Grid>
+        </GridAppBody>
+      </WrapApp>
     );
   }
 }
