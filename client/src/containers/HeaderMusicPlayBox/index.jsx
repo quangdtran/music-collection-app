@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import theme from '@src/root/theme';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
@@ -9,6 +10,10 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
+
+import {
+  changeIsPlayState,
+} from './action';
 
 import {
   WrapHeaderMusicPlayBox,
@@ -43,7 +48,11 @@ class HeaderMusicPlayBox extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, isPlay } = this.props;
+    const {
+      name,
+      singer,
+    } = this.props.songIsSelected;
     return (
       <WrapHeaderMusicPlayBox>
         <SongInfoBox>
@@ -52,11 +61,19 @@ class HeaderMusicPlayBox extends Component {
               width: '100px',
               height: '100px',
               borderRadius: '100%',
-              margin: '20px 0',
+              margin: '0 20px',
             }}
             src="https://stc-id.nixcdn.com/v11/images/df-singer-300x300.jpg"
             alt=""
           />
+          <div
+            style={{
+              margin: '0 20px',
+            }}
+          >
+            <p>{name}</p>
+            <p>Ca sĩ: {singer}</p>
+          </div>
         </SongInfoBox>
         <SongTimeline>
           <PointTimeline>
@@ -66,9 +83,11 @@ class HeaderMusicPlayBox extends Component {
         <SongPlayBox>
           <LeftOptionPlayBox>
 
-            <ItemOptionPlayBox>
+            <ItemOptionPlayBox
+              onClick={() => this.props.changeIsPlayState(!isPlay)}
+            >
               {
-                this.state.isPlay
+                isPlay
                   ? <PauseIcon className={classes.icon} />
                   : <PlayArrowIcon className={classes.icon} />
               }
@@ -100,4 +119,19 @@ HeaderMusicPlayBox.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeaderMusicPlayBox);
+const mapStateToProps = (state) => {
+  return {
+    songIsSelected: state.songSelection.songIsSelected,
+    isPlay: state.headerMusicPlayBox.isPlay,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeIsPlayState: isPlay => dispatch(changeIsPlayState(isPlay)),
+  };
+};
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(HeaderMusicPlayBox),
+);

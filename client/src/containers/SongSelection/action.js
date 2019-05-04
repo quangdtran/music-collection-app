@@ -2,9 +2,9 @@ import {
   SELECT_SONG,
 } from './constants';
 
-export const changeSongIsSelected = id => ({
+export const changeSongIsSelected = song => ({
   type: SELECT_SONG,
   payload: {
-    idIsSelected: id,
+    songIsSelected: song,
   },
 });

@@ -1,19 +1,14 @@
 import {
-  SELECT_SONG,
+  CHANGE_IS_PLAY_STATE,
 } from './constants';
 
 const initialState = {
-  songIsSelected: {
-    id: null,
-    number: null,
-    singer: null,
-    name: null,
-  },
+  isPlay: false,
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case SELECT_SONG:
+    case CHANGE_IS_PLAY_STATE:
       return { ...state, ...payload };
 
     default:

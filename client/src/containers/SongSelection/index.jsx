@@ -9,16 +9,20 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 
 import {
+  changeIsPlayState,
+} from '@containers/HeaderMusicPlayBox/action';
+
+import {
+  changeSongIsSelected,
+} from './action';
+
+import {
   WrapSongSelection,
   WrapSongInfo,
   WrapOrdinalNumber,
   OrdinalNumber,
   WrapSongInfoDetail,
 } from './SongSelection.styled';
-
-import {
-  changeSongIsSelected,
-} from './action';
 
 const styles = {
   icon: {
@@ -45,16 +49,37 @@ class SongSelection extends Component {
 
   // lifecycle: check mount to set the first element is selected
   componentDidMount() {
-    if (this.props.number === 1) this.setState({ isSelected: true });
+    const {
+      id,
+      name,
+      singer,
+      number,
+    } = this.props;
+    if (this.props.number === 1) {
+      this.props.changeSongIsSelected({
+        id, name, singer, number,
+      });
+    }
   }
 
   // lifecycle: check props change
   componentWillReceiveProps(nextProps, oldProps) {
-    if (nextProps.idIsSelected !== oldProps.idIsSelected) {
-      if (this.props.id === nextProps.idIsSelected) {
-        this.setState({ isSelected: true });
-      } else if (this.state.isSelected) this.setState({ isSelected: false });
+    if (this.props.id === nextProps.songIsSelected.id) {
+      this.setState({ isSelected: true });
+    } else if (this.state.isSelected) this.setState({ isSelected: false });
+  }
+
+  // method: render play or pause state
+  renderPlayOrPause() {
+    const { classes, isPlay } = this.props;
+    if (this.state.isSelected) {
+      return (
+        isPlay
+          ? <PauseCircleOutlineIcon className={classes.iconIsSelected} />
+          : <PlayCircleOutlineIcon className={classes.iconIsSelected} />
+      );
     }
+    return <PlayCircleOutlineIcon className={classes.icon} />;
   }
 
   render() {
@@ -68,7 +93,12 @@ class SongSelection extends Component {
     const { isSelected } = this.state;
     return (
       <WrapSongSelection
-        onClick={() => this.props.changeSongIsSelected(id)}
+        onClick={() => {
+          this.props.changeSongIsSelected({
+            id, number, name, singer,
+          });
+          this.props.changeIsPlayToTrue();
+        }}
         background-color={
           isSelected
             ? theme.backgroundColor.selectBoxSelection
@@ -76,14 +106,10 @@ class SongSelection extends Component {
         }
       >
         <WrapOrdinalNumber>
-          <OrdinalNumber>{this.props.number}</OrdinalNumber>
+          <OrdinalNumber>{number}</OrdinalNumber>
         </WrapOrdinalNumber>
         <WrapSongInfo>
-          {
-            isSelected
-              ? <PauseCircleOutlineIcon className={classes.iconIsSelected} />
-              : <PlayCircleOutlineIcon className={classes.icon} />
-          }
+          {this.renderPlayOrPause()}
           <WrapSongInfoDetail>
             <h4>{this.props.name}</h4>
             <i>Nghệ sĩ: {this.props.singer}</i>
@@ -100,13 +126,15 @@ SongSelection.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    idIsSelected: state.songSelection.idIsSelected,
+    songIsSelected: state.songSelection.songIsSelected,
+    isPlay: state.headerMusicPlayBox.isPlay,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeSongIsSelected: id => dispatch(changeSongIsSelected(id)),
+    changeSongIsSelected: song => dispatch(changeSongIsSelected(song)),
+    changeIsPlayToTrue: () => dispatch(changeIsPlayState(true)),
   };
 };
 

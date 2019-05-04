@@ -1,0 +1,1 @@
+export const CHANGE_IS_PLAY_STATE = 'CHANGE_IS_PLAY_STATE';
