@@ -7,6 +7,7 @@ import {
 
 import SongSelection from '@containers/SongSelection';
 import HeaderMusicPlayBox from '@containers/HeaderMusicPlayBox';
+import SongCommentBox from '@containers/SongCommentBox';
 
 import {
   WrapMusicPlayBox,
@@ -64,8 +65,11 @@ export default class index extends Component {
             style={{
               height: '100%',
               borderRight: `1px solid ${theme.borderColor.wrap}`,
+              alignItem: 'stretch',
+              flexGrow: 1,
             }}
-          >Unknowed
+          >
+            <SongCommentBox />
           </Grid>
           <GridListSongPlaylist item xs={4}>
             {this.renderListSongPlaying()}

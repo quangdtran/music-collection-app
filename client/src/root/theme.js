@@ -17,6 +17,7 @@ export default {
     offline: 'grey',
     hoverIcon: '#356ad2',
     iconSideBar: '#4a4a4a',
+    activeBtn: '#004aa0',
   },
   borderColor: {
     wrap: '#E5E5E9',

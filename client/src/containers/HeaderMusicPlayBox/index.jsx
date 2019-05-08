@@ -69,6 +69,7 @@ class HeaderMusicPlayBox extends Component {
           <div
             style={{
               margin: '0 20px',
+              textAlign: 'center',
             }}
           >
             <p>{name}</p>
