@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import theme from '@src/root/theme';
 
+import SongComment from '@containers/SongComment';
+
 import {
   WrapSongCommentBox,
   CaptionBox,
@@ -11,6 +13,33 @@ import {
   CommentInput,
   SendButton,
 } from './SongCommentBox.styled';
+
+const listComment = [
+  {
+    id: 1,
+    content: 'bài này nghe phê nè !!',
+    userName: 'Nguyen Kim Long',
+    img: 'https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.0-1/p160x160/48390365_1639536876192328_8072917733261443072_n.jpg?_nc_cat=110&_nc_oc=AQkkDRSyK0DsqhG5hcJM-ExHSEyiTTjtmP3_puGIPXCYULo4LoY3_uoil3FML9rc8ns&_nc_ht=scontent.fsgn5-3.fna&oh=41337917128254d89ffad4ed5ab4476a&oe=5D3C2B43',
+  },
+  {
+    id: 2,
+    content: 't thik BAT hát mấy bài balad hơn, bài này cũng được',
+    userName: 'Vo Thanh Tai',
+    img: 'https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.0-1/p160x160/48390365_1639536876192328_8072917733261443072_n.jpg?_nc_cat=110&_nc_oc=AQkkDRSyK0DsqhG5hcJM-ExHSEyiTTjtmP3_puGIPXCYULo4LoY3_uoil3FML9rc8ns&_nc_ht=scontent.fsgn5-3.fna&oh=41337917128254d89ffad4ed5ab4476a&oe=5D3C2B43',
+  },
+  {
+    id: 3,
+    content: 'bài này hay mà, t ko nghe được mấy nhạc nhẹ nhàng quá',
+    userName: 'Nguyen Kim Long',
+    img: 'https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.0-1/p160x160/48390365_1639536876192328_8072917733261443072_n.jpg?_nc_cat=110&_nc_oc=AQkkDRSyK0DsqhG5hcJM-ExHSEyiTTjtmP3_puGIPXCYULo4LoY3_uoil3FML9rc8ns&_nc_ht=scontent.fsgn5-3.fna&oh=41337917128254d89ffad4ed5ab4476a&oe=5D3C2B43',
+  },
+  {
+    id: 4,
+    content: 'bài này hay, nhưng phối lại theo chất liệu của âm nhạc nhật và phổ thành tiếng nhật + tiếng đức thì hay ^^',
+    userName: 'Thai Xuan Tho',
+    img: 'https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.0-1/p160x160/48390365_1639536876192328_8072917733261443072_n.jpg?_nc_cat=110&_nc_oc=AQkkDRSyK0DsqhG5hcJM-ExHSEyiTTjtmP3_puGIPXCYULo4LoY3_uoil3FML9rc8ns&_nc_ht=scontent.fsgn5-3.fna&oh=41337917128254d89ffad4ed5ab4476a&oe=5D3C2B43',
+  },
+];
 
 export default class index extends Component {
   constructor(props) {
@@ -35,13 +64,20 @@ export default class index extends Component {
     this.setState({ [name]: value });
   }
 
+  // method: render list comment
+  renderListComment() {
+    return listComment.map(comment => <SongComment key={comment.id} {...comment} />);
+  }
+
   render() {
     return (
       <WrapSongCommentBox>
         <CaptionBox>
           <p>Tình yêu là mãi mãi !!</p>
         </CaptionBox>
-        <WrapListComment />
+        <WrapListComment>
+          {this.renderListComment()}
+        </WrapListComment>
         <CommentBox>
           <CommentInput
             type="text"

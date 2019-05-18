@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-
 import theme from '@src/root/theme';
 
 import PropTypes from 'prop-types';
@@ -11,15 +10,22 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
+import PlaylistTab from '@containers/PlaylistTab';
+import SongTab from '@containers/SongTab';
+
 import MusicRoomSelection from '@containers/MusicRoomSelection';
 
 import {
   WrapMusicRoomSideBar,
-  WrapListMusicRoom,
-  WrapOptionSideBar,
-  WrapSearchRoom,
-  SearchRoomInput,
+  WrapTabSelection,
+  TabSelection,
 } from './MusicRoomSideBar.styled';
+
+import {
+  FRIEND_TAB,
+  PLAYLIST_TAB,
+  SONG_TAB,
+} from './constants';
 
 const listRoomMusicData = [
   {
@@ -73,70 +79,104 @@ class MusicRoomSideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bgColor: theme.backgroundColor.searchMusicRoom,
-      borderColor: 'white',
-      searchText: '',
+      tabIsSelected: SONG_TAB,
     };
   }
 
-  // method: handler key down search room input
-  handlerKeyDownSearchRoom(evt) {
-    if (evt.keyCode === 27) {
-      this.setState({ searchText: '' });
-      ReactDOM.findDOMNode(this.refs['search-room-input']).blur();
+  // method: render tab
+  renderTab() {
+    const { tabIsSelected } = this.state;
+    switch (tabIsSelected) {
+      case SONG_TAB: return <SongTab />;
+      case PLAYLIST_TAB: return <PlaylistTab />;
+      case FRIEND_TAB: return 'Unknowed';
+      default: return 'Unknowed';
     }
-  }
-
-  // method: update search text
-  updateSearchText(evt) {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
-  }
-
-  // method: render list music room
-  renderListMusicRoom() {
-    return listRoomMusicData.map((roomInfo, index) =>
-      <MusicRoomSelection key={roomInfo.id} {...roomInfo} />);
   }
 
   render() {
     const { classes } = this.props;
+    const {
+      tabIsSelected,
+    } = this.state;
     return (
       <WrapMusicRoomSideBar>
-        <WrapOptionSideBar>
-          <WrapSearchRoom
-            border-color={this.state.borderColor}
-            background-color={this.state.bgColor}
+        <WrapTabSelection container>
+          <TabSelection
+            onClick={() => this.setState({ tabIsSelected: SONG_TAB })}
+            item
+            color={
+              tabIsSelected === SONG_TAB
+                ? theme.color.online
+                : 'black'
+            }
+            border-color-bottom={
+              tabIsSelected === SONG_TAB
+                ? 'white'
+                : theme.borderColor.wrap
+            }
+            border-color-right={
+              tabIsSelected === SONG_TAB
+                ? theme.borderColor.wrap
+                : 'white'
+            }
+            xs={4}
           >
-            <SearchIcon style={{ color: 'grey' }} />
-            <SearchRoomInput
-              ref="search-room-input"
-              placeholder="Tìm kiếm playlist"
-              background-color={this.state.bgColor}
-              name="searchText"
-              value={this.state.searchText}
-              onChange={evt => this.updateSearchText(evt)}
-              onFocus={() => {
-                this.setState({
-                  bgColor: 'white',
-                  borderColor: theme.borderColor.focusSearchMusicRoom,
-                });
-              }}
-              onBlur={() => {
-                this.setState({
-                  bgColor: theme.backgroundColor.searchMusicRoom,
-                  borderColor: 'white',
-                });
-              }}
-              onKeyDown={evt => this.handlerKeyDownSearchRoom(evt)}
-            />
-          </WrapSearchRoom>
-          <AddBoxIcon className={classes.icon} />
-          <PlaylistAddIcon className={classes.icon} />
-        </WrapOptionSideBar>
-        <WrapListMusicRoom>
-          {this.renderListMusicRoom()}
-        </WrapListMusicRoom>
+            Bài hát
+          </TabSelection>
+
+          <TabSelection
+            onClick={() => this.setState({ tabIsSelected: PLAYLIST_TAB })}
+            item
+            xs={4}
+            color={
+              tabIsSelected === PLAYLIST_TAB
+                ? theme.color.online
+                : 'black'
+            }
+            border-color-bottom={
+              tabIsSelected === PLAYLIST_TAB
+                ? 'white'
+                : theme.borderColor.wrap
+            }
+            border-color-right={
+              tabIsSelected === PLAYLIST_TAB
+                ? theme.borderColor.wrap
+                : 'white'
+            }
+            border-color-left={
+              tabIsSelected === PLAYLIST_TAB
+                ? theme.borderColor.wrap
+                : 'white'
+            }
+          >
+            Playlist
+          </TabSelection>
+
+          <TabSelection
+            onClick={() => this.setState({ tabIsSelected: FRIEND_TAB })}
+            item
+            xs={4}
+            color={
+              tabIsSelected === FRIEND_TAB
+                ? theme.color.online
+                : 'black'
+            }
+            border-color-bottom={
+              tabIsSelected === FRIEND_TAB
+                ? 'white'
+                : theme.borderColor.wrap
+            }
+            border-color-left={
+              tabIsSelected === FRIEND_TAB
+                ? theme.borderColor.wrap
+                : 'white'
+            }
+          >
+            Bạn bè
+          </TabSelection>
+        </WrapTabSelection>
+        {this.renderTab()}
       </WrapMusicRoomSideBar>
     );
   }

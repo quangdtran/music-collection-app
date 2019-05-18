@@ -25,6 +25,10 @@ export const CaptionBox = styled.div`
 export const WrapListComment = styled.div`
   height: 55%;
   width: 100%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const CommentBox = styled.div`

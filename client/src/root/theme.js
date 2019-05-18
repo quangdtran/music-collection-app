@@ -9,6 +9,7 @@ export default {
     convertFileBox: '#E0E3EB',
     timeline: '#5E5E5E',
     blue: '#356ad2',
+    commentLine: '#f2f3f5',
   },
   color: {
     textHeaderBar: '#fff',

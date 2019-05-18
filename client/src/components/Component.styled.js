@@ -35,7 +35,8 @@ export const IconOnlOff = styled(FiberManualRecordIcon)`
 
 // HeaderUserInfo component
 
-export const WrapUserInfo = styled(Grid)`
+export const WrapUserInfo = styled.div`
+  display: flex;
   align-items: center;
   justify-content: center;
 `;
@@ -47,7 +48,7 @@ export const AvatarUserInfo = styled(Avatar)`
   height: 40px !important;
 `;
 
-export const NameUserInfo = styled.a`
+export const UserNameInfo = styled.a`
   color: ${theme.color.textHeaderBar};
   align-self: start;
   margin-top: 0.25em;

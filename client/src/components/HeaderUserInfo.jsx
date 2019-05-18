@@ -2,7 +2,7 @@ import React from 'react';
 import {
   WrapUserInfo,
   AvatarUserInfo,
-  NameUserInfo,
+  UserNameInfo,
 } from '@components/Component.styled';
 
 const user = {
@@ -14,9 +14,9 @@ const HeaderUserInfo = (props) => {
   return (
     <WrapUserInfo container>
       <AvatarUserInfo style={{ border: '1px solid white' }} src={user.img} />
-      <NameUserInfo href="http://fb.com" target="_blank" rel="noopener noreferrer">
+      <UserNameInfo href="http://fb.com" target="_blank" rel="noopener noreferrer">
         {user.name}
-      </NameUserInfo>
+      </UserNameInfo>
     </WrapUserInfo>
   );
 };

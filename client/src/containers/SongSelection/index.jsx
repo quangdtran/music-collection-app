@@ -69,6 +69,25 @@ class SongSelection extends Component {
     } else if (this.state.isSelected) this.setState({ isSelected: false });
   }
 
+  // method: handle click song selection
+  handleClickSongSelection() {
+    const {
+      number,
+      name,
+      singer,
+      id,
+      isPlay,
+    } = this.props;
+    if (this.state.isSelected) {
+      this.props.changeIsPlayState(!isPlay);
+    } else {
+      this.props.changeSongIsSelected({
+        id, number, name, singer,
+      });
+      this.props.changeIsPlayState(true);
+    }
+  }
+
   // method: render play or pause state
   renderPlayOrPause() {
     const { classes, isPlay } = this.props;
@@ -89,16 +108,12 @@ class SongSelection extends Component {
       name,
       singer,
       id,
+      isPlay,
     } = this.props;
     const { isSelected } = this.state;
     return (
       <WrapSongSelection
-        onClick={() => {
-          this.props.changeSongIsSelected({
-            id, number, name, singer,
-          });
-          this.props.changeIsPlayToTrue();
-        }}
+        onClick={() => this.handleClickSongSelection()}
         background-color={
           isSelected
             ? theme.backgroundColor.selectBoxSelection
@@ -111,8 +126,8 @@ class SongSelection extends Component {
         <WrapSongInfo>
           {this.renderPlayOrPause()}
           <WrapSongInfoDetail>
-            <h4>{this.props.name}</h4>
-            <i>Nghệ sĩ: {this.props.singer}</i>
+            <h4>{name}</h4>
+            <i>Nghệ sĩ: {singer}</i>
           </WrapSongInfoDetail>
         </WrapSongInfo>
       </WrapSongSelection>
@@ -134,7 +149,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeSongIsSelected: song => dispatch(changeSongIsSelected(song)),
-    changeIsPlayToTrue: () => dispatch(changeIsPlayState(true)),
+    changeIsPlayState: state => dispatch(changeIsPlayState(state)),
   };
 };
 

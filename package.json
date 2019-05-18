@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "client": "cd client && npm run start",
+    "start-mp3": "cd client && cd src && cd root && cd musics && here --port 3003",
     "server": "cd server && npm run start",
     "client-build": "cd client && npm run build",
     "start": "concurrently - kill-others \"npm run server\" \"npm run client\""

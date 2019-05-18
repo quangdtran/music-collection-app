@@ -1,36 +1,28 @@
 import styled from 'styled-components';
 import theme from '@src/root/theme';
 
+import {
+  Grid,
+} from '@material-ui/core';
+
 export const WrapMusicRoomSideBar = styled.div`
-
 `;
 
-export const WrapOptionSideBar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 20px 0px;
-  border-bottom: 1px solid ${theme.borderColor.wrap};
+export const WrapTabSelection = styled(Grid)`
+  /* border-bottom: 1px solid ${theme.borderColor.wrap}; */
 `;
 
-export const WrapListMusicRoom = styled.div``;
+export const TabSelection = styled(Grid)`
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  border-top: 1px solid ${props => props['border-color-top'] || 'white'};
+  border-bottom: 1px solid ${props => props['border-color-bottom'] || 'white'};
+  border-left: 1px solid ${props => props['border-color-left'] || 'white'};
+  border-right: 1px solid ${props => props['border-color-right'] || 'white'};
+  color: ${props => props.color};
 
-export const WrapSearchRoom = styled.div`
-  background-color: ${props => props['background-color']};
-  border: 1px solid;
-  border-color: ${props => props['border-color']};
-  border-radius: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 7px;
-`;
-
-export const SearchRoomInput = styled.input`
-  margin-left: 3px;
-  outline: none;
-  border: none;
-  background-color: ${props => props['background-color']};
+  &:hover {
+    background-color: ${theme.backgroundColor.hoverBoxSelection};
+  }
 `;
