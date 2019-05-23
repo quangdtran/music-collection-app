@@ -139,14 +139,16 @@ export const VolumeLine = styled.div`
 
 export const VolumeLineCurrent = styled(VolumeLine)`
   position: absolute;
-  width: 100%;
+  width: ${props => (props.volume > 1 ? 100 : props.volume * 100)}%;
   right: 0;
   top: 0;
+  background-color: ${theme.backgroundColor.blue} !important;
 `;
 
 export const PointVolume = styled(PointTimeline)`
   position: absolute;
-  right: ${props => props.volume * 100}%;
+  right: ${props => (props.volume > 1 ? 100 : props.volume * 100)}%;
+  transform: translate(50%, -50%);
   height: 0.75em;
   width: 0.75em;
   cursor: pointer;
@@ -156,5 +158,3 @@ export const PointVolume = styled(PointTimeline)`
     background-color: ${theme.color.blue}
   }
 `;
-
-export const VolumeUpIconStyled = styled(VolumeUpIcon)``;

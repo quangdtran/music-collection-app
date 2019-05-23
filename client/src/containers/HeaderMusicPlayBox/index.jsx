@@ -10,7 +10,9 @@ import PauseIcon from '@material-ui/icons/Pause';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 import {
   changeIsPlayState,
@@ -29,7 +31,6 @@ import {
   ItemOptionPlayBox,
   PointShowCurrentTime,
   InnerPointShowCurrentTime,
-  VolumeUpIconStyled,
   WrapVolumeOption,
   VolumeLine,
   PointVolume,
@@ -59,6 +60,7 @@ class HeaderMusicPlayBox extends Component {
       percentTimelineHover: 0,
       volume: 1,
       isShowVolumeOption: true,
+      isMuted: false,
     };
   }
 
@@ -67,6 +69,15 @@ class HeaderMusicPlayBox extends Component {
     if (newProps.isPlay) {
       audio.play();
     } else audio.pause();
+  }
+
+  componentDidUpdate() {
+    const { volume, isMuted } = this.state;
+    const audio = ReactDOM.findDOMNode(this.refs['audio-tag']);
+    if (isMuted) audio.volume = 0;
+    else if (volume > 1) audio.volume = 1;
+    else if (volume < 0) audio.volume = 0;
+    else audio.volume = volume;
   }
 
   // get percent is loaded timeline
@@ -83,13 +94,15 @@ class HeaderMusicPlayBox extends Component {
     const beginPos = volumeLineEl.getBoundingClientRect().left;
     const width = volumeLineEl.offsetWidth;
     const percentVolumeLine = 100 - (((evt.clientX - beginPos) / width) * 100);
-    return percentVolumeLine;
+    return percentVolumeLine < 0 ? 0 : percentVolumeLine;
   }
 
   setVolumeAtPoint(evt) {
     const percentVolume = this.getPercentVolumeLine(evt);
-    this.setState({ volume: (percentVolume / 100) });
-    console.log(percentVolume);
+    this.setState({
+      volume: (percentVolume / 100),
+      isMuted: percentVolume <= 0,
+    });
   }
 
   setPointTimelinePosition(evt) {
@@ -105,6 +118,11 @@ class HeaderMusicPlayBox extends Component {
   setTooltipPosition(evt) {
     const percentTimelineHover = this.getPercentTimeline(evt);
     this.setState({ percentTimelineHover });
+  }
+
+  setPointVolumePosition(evt) {
+    evt.stopPropagation();
+    this.setVolumeAtPoint(evt);
   }
 
   // method: update track time the song
@@ -134,6 +152,45 @@ class HeaderMusicPlayBox extends Component {
     return null;
   }
 
+  renderVolumeType() {
+    const { volume, isMuted } = this.state;
+    const { classes } = this.props;
+    if (volume > 0.5 && !isMuted) {
+      return (
+        <VolumeUpIcon
+          // onMouseOver={() => this.setState({ isShowVolumeOption: true })}
+          // onMouseOut={() => this.setState({ isShowVolumeOption: false })}
+          onFocus={() => {}}
+          onBlur={(() => {})}
+          onClick={() => this.setState({ isMuted: volume > 0 ? !isMuted : true })}
+          className={classes.icon}
+        />
+      );
+    }
+    if (isMuted) {
+      return (
+        <VolumeOffIcon
+          // onMouseOver={() => this.setState({ isShowVolumeOption: true })}
+          // onMouseOut={() => this.setState({ isShowVolumeOption: false })}
+          onFocus={() => {}}
+          onBlur={(() => {})}
+          onClick={() => this.setState({ isMuted: volume > 0 ? !isMuted : true })}
+          className={classes.icon}
+        />
+      );
+    }
+    return (
+      <VolumeDownIcon
+        // onMouseOver={() => this.setState({ isShowVolumeOption: true })}
+        // onMouseOut={() => this.setState({ isShowVolumeOption: false })}
+        onFocus={() => {}}
+        onBlur={(() => {})}
+        onClick={() => this.setState({ isMuted: volume > 0 ? !isMuted : true })}
+        className={classes.icon}
+      />
+    );
+  }
+
   render() {
     const { classes, isPlay } = this.props;
     const {
@@ -146,6 +203,7 @@ class HeaderMusicPlayBox extends Component {
       percentTimelineHover,
       isShowVolumeOption,
       volume,
+      isMuted,
     } = this.state;
     return (
       <WrapHeaderMusicPlayBox
@@ -187,7 +245,7 @@ class HeaderMusicPlayBox extends Component {
           >
             <InnerPointShowCurrentTime left={percentTimelineHover} />
           </PointShowCurrentTime>
-          <PointTimeline left={(currentTime / duration) * 99}>
+          <PointTimeline data-name="haha" ref="point-timeline" left={(currentTime / duration) * 99}>
             <InnerPointTimeline />
           </PointTimeline>
         </SongTimeline>
@@ -219,30 +277,28 @@ class HeaderMusicPlayBox extends Component {
             </ItemOptionPlayBox>
 
           </LeftOptionPlayBox>
-          <RightOptionPlayBox>
+          <RightOptionPlayBox
+            onDragStart={evt => evt.stopPropagation()}
+            onDragOver={evt => this.setPointVolumePosition(evt)}
+            onDrop={evt => evt.stopPropagation()}
+          >
             <WrapVolumeOption is-show={isShowVolumeOption}>
               <VolumeLine
                 ref="volume-line"
                 onClick={evt => this.setVolumeAtPoint(evt)}
               >
-                <VolumeLineCurrent volume={volume} />
-                <PointVolume volume={volume}>
+                <VolumeLineCurrent volume={isMuted ? 0 : volume} />
+                <PointVolume volume={isMuted ? 0 : volume}>
                   <InnerPointVolume />
                 </PointVolume>
               </VolumeLine>
             </WrapVolumeOption>
-            <VolumeUpIconStyled
-              // onMouseOver={() => this.setState({ isShowVolumeOption: true })}
-              // onMouseOut={() => this.setState({ isShowVolumeOption: false })}
-              onFocus={() => {}}
-              onBlur={(() => {})}
-              className={classes.icon}
-            />
+            {this.renderVolumeType()}
           </RightOptionPlayBox>
         </SongPlayBox>
         <audio
           ref="audio-tag"
-          volume={volume}
+          volume={isMuted ? 0 : volume}
           src="http://localhost:3003/MaiMaiLaCuaNhau-BuiAnhTuan-4652621.mp3"
           preload="auto"
           onTimeUpdate={() => this.updateTrackTime()}
